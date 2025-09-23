@@ -26,7 +26,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            mathieuruellan/piwigo
+            gmaniac/piwigo
           tags: |
             # set latest tag for master branch
             type=raw,value=latest,enable={{is_default_branch}}
@@ -62,4 +62,4 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-          repository: mathieuruellan/piwigo
+          repository: gmaniac/piwigo
