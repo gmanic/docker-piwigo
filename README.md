@@ -2,7 +2,7 @@
 
 I've stopped using piwigo due to bugs never fixed. 
 You can export and rebuild your virtual albums structure into file directory with this tools: https://github.com/mathieuruellan/piwigo-exporter
-
+(First test with latest piwigoversion)
 
 # Piwigo-Docker
 
