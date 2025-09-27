@@ -97,6 +97,10 @@ post_max_size = 100M
 upload_max_filesize = 100M
 EOF
 
+COPY <<EOF /usr/local/etc/php-fpm.d/zzz-www.conf
+[www]
+pm.max_children = 30
+EOF
 
 COPY <<EOF /etc/nginx/nginx.conf
 user  nginx;
