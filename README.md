@@ -1,13 +1,16 @@
-# This project is no longer maintained. 
+# This project is paritally maintained. 
 
+---
+Mathieu stopped mainting due to:
 I've stopped using piwigo due to bugs never fixed. 
 You can export and rebuild your virtual albums structure into file directory with this tools: https://github.com/mathieuruellan/piwigo-exporter
+---
 
-(First test with latest piwigoversion)
-
-gmanic: 
-- forked repo from latest mathieuruellan
-- upgrade piwigo-Version to 15.7.0
+I have forked his repo and update to current piwigo version, as far as possible.
+Latest Changes:
+- upgrade piwigo-Version to 16.1.0
+- stay on php82-alpine3.22
+  (due to build problems with 3.23)
 
 # Piwigo-Docker
 
