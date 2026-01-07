@@ -1,4 +1,4 @@
-FROM php:8.2-fpm-alpine3.22
+FROM php:8.5-fpm-alpine
 
 LABEL MAINTAINER="J Gecius <devel@gecius.de>"
 ARG PIWIGO_VERSION="16.2.0"
@@ -25,7 +25,7 @@ apk add     wget \
             unzip \
             exiftool \
             libldap \
-			php82-pecl-imagick \
+			php85-pecl-imagick \
             libzip \
 
 EOF
