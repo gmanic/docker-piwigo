@@ -2,13 +2,13 @@ name: Docker Image CI
 
 on:
   push:
-    branches: 
-      - "**"
+#    branches: 
+#      - "**"
     tags:
       - "v*"
-  pull_request:
-    branches: 
-      - "master" 
+#  pull_request:
+#    branches: 
+#      - "master" 
   schedule:
     - cron: '0 2 * * SUN'
 
