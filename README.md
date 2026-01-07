@@ -1,4 +1,4 @@
-# This project is paritally maintained. 
+# This project is partially maintained. 
 
 ---
 Mathieu stopped mainting due to:
