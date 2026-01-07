@@ -3,13 +3,13 @@ name: Docker Image CI
 on:
   workflow_dispatch:
   push:
-#    branches:
-#      - "**"
+    branches:
+      - "**"
     tags:
       - "*"
-#  pull_request:
-#    branches: 
-#      - "master" 
+  pull_request:
+    branches: 
+      - "master" 
   schedule:
     - cron: '0 2 * * SUN'
 
@@ -51,7 +51,7 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
       - name: ECho tags
         run: |
-          echo -e "tags: \n${{ steps.tags.outputs.tags }}"
+          echo -e "tags: \n${{ steps.meta.outputs.tags }}"
 #      - name: Set up QEMU
 #        uses: docker/setup-qemu-action@v2
 #      - name: Set up Docker Buildx
