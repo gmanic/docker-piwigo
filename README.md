@@ -8,7 +8,7 @@ You can export and rebuild your virtual albums structure into file directory wit
 
 I have forked his repo and update to current piwigo version, as far as possible.
 Latest Changes:
-- upgrade piwigo-Version to 16.1.0
+- upgrade piwigo-Version to 16.2.0
 - stay on php82-alpine3.22
   (due to build problems with 3.23)
 
