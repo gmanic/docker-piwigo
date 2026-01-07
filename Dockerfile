@@ -1,7 +1,7 @@
-FROM php:8.5-fpm-alpine
+FROM php:8.2-fpm-alpine
 
 LABEL MAINTAINER="J Gecius <devel@gecius.de>"
-ARG PIWIGO_VERSION="16.2.0"
+ARG PIWIGO_VERSION="16.1.0"
 ENV BASH_MODE="set -e"
 
 RUN <<EOF
