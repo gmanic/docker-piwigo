@@ -50,9 +50,18 @@ jobs:
             type=ref,event=tag
             type=semver,pattern={{version}}-*
             type=semver,pattern={{major}}.{{minor}}
+      - name: Build and push
+        id: gen_tags
+        run: |
+          if [[ $GITHUB_REF == 'refs/tags/'* ]]; then
+            TAGS='["gmaniac/piwigo:latest","user/image:'${GITHUB_REF/refs\/tags\//}'"]'
+          else
+            TAGS='["gmaniac/piwigo:latest"]'
+          fi
+          echo '::set-output name=tags::'$TAGS
       - name: ECho tags
         run: |
-          echo -e "tags: \n${{ steps.meta.outputs.tags }}"
+          echo -e "tags: \n${{ fromJson(steps.gen_tags.outputs.tags) }}"
 #      - name: Set up QEMU
 #        uses: docker/setup-qemu-action@v2
 #      - name: Set up Docker Buildx
