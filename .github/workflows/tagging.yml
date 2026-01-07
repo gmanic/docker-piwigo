@@ -1,0 +1,21 @@
+# This workflow will tag the repo with tags according to piwigo
+# version and base-image version
+#
+
+name: Tagging
+on: 
+  workflow_dispatch:
+  push:
+  pull_request:
+
+jobs:
+  tagger:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+    - uses: actions/labeler@v4
+      with:
+        repo-token: "${{ secrets.GITHUB_TOKEN }}"
