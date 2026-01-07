@@ -25,7 +25,7 @@ jobs:
         run: |
           N_TAG=$(grep 'FROM php:' Dockerfile|sed 's/FROM php://g')
           M_TAG=$(grep 'ARG PIWIGO_VERSION' Dockerfile|sed 's/ARG PIWIGO_VERSION=//g'|sed 's/"//g')
-          New_TAG=$M_TAG-$N_TAG
+          New_TAG=$M_TAG-php$N_TAG
           echo "New Tag generated: $New_TAG, $M_TAG"
           echo "NEW_TAG=$New_TAG" >> $GITHUB_ENV
       - name: Auto-tag repo with full tag
@@ -43,32 +43,36 @@ jobs:
           tags: |
             # set latest tag for master branch
             type=raw,value=latest,enable={{is_default_branch}}
-            type=raw,value={{raw}}
+            {{raw}}
             type=ref,event=branch
             type=ref,event=pr
+            type=ref,event=tag
             type=semver,pattern={{version}}-*
             type=semver,pattern={{major}}.{{minor}}
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build and push
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          platforms: linux/amd64,linux/arm64
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-      - name: Docker Hub Description
-        if: github.ref == 'refs/heads/master'
-        uses: peter-evans/dockerhub-description@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-          repository: gmaniac/piwigo
+      - name: ECho tags
+        run: |
+          echo -e "tags: \n${{ steps.tags.outputs.tags }}"
+#      - name: Set up QEMU
+#        uses: docker/setup-qemu-action@v2
+#      - name: Set up Docker Buildx
+#        uses: docker/setup-buildx-action@v2
+#      - name: Login to Docker Hub
+#        uses: docker/login-action@v2
+#        with:
+#          username: ${{ secrets.DOCKERHUB_USERNAME }}
+#          password: ${{ secrets.DOCKERHUB_TOKEN }}
+#      - name: Build and push
+#        uses: docker/build-push-action@v4
+#        with:
+#          context: .
+#          platforms: linux/amd64,linux/arm64
+#          push: ${{ github.event_name != 'pull_request' }}
+#          tags: ${{ steps.meta.outputs.tags }}
+#          labels: ${{ steps.meta.outputs.labels }}
+#      - name: Docker Hub Description
+#        if: github.ref == 'refs/heads/master'
+#        uses: peter-evans/dockerhub-description@v3
+#        with:
+#          username: ${{ secrets.DOCKERHUB_USERNAME }}
+#          password: ${{ secrets.DOCKERHUB_TOKEN }}
+#          repository: gmaniac/piwigo
