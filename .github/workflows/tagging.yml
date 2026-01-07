@@ -11,11 +11,24 @@ on:
 jobs:
   tagger:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
 
     steps:
-    - uses: actions/labeler@v4
-      with:
-        repo-token: "${{ secrets.GITHUB_TOKEN }}"
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Generate tags
+        run: |
+          N_TAG=$(grep 'FROM php:' Dockerfile|sed 's/FROM php://g')
+          M_TAG=$(grep 'ARG PIWIGO_VERSION' Dockerfile|sed 's/ARG PIWIGO_VERSION=//g'|sed 's/"//g')
+          New_TAG=$M_TAG-php$N_TAG
+          echo "New Tag generated: $New_TAG, $M_TAG"
+          echo "NEW_TAG=$New_TAG" >> $GITHUB_ENV
+          echo "N_TAG=$N_TAG" >> $GITHUB_ENV
+      - name: Auto-tag repo with full tag
+        continue-on-error: true
+        run: |
+          git config user.name "Github Actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git tag $N_TAG
+          git push origin $N_TAG
+          git tag $NEW_TAG
+          git push origin $NEW_TAG
