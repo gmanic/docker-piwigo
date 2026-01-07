@@ -10,6 +10,7 @@ I have forked his repo and update to current piwigo version, as far as possible.
 Latest Changes:
 - upgrade piwigo-Version to 16.2.0
 - upgrade to php85-fpm-alpine (which is 3.23)
+(currently trying to implement fully automated docker-builds including tagging)
 
 # Piwigo-Docker
 
