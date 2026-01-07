@@ -24,7 +24,7 @@ jobs:
       - name: Generate tags
         run: |
           N_TAG=$(grep 'FROM php:' Dockerfile|sed 's/FROM php://g')
-          M_TAG=$(grep 'ARG PIWIGO_VERSION' Dockerfile|sed 's/ARG PIWIGO_VERSION=//g')
+          M_TAG=$(grep 'ARG PIWIGO_VERSION' Dockerfile|sed 's/ARG PIWIGO_VERSION=//g'|sed 's/"//g')
           New_TAG=$M_TAG-$N_TAG
           echo "New Tag generated: $New_TAG, $M_TAG"
           echo "NEW_TAG=$New_TAG" >> $GITHUB_ENV
