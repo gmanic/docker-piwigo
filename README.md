@@ -8,14 +8,15 @@ You can export and rebuild your virtual albums structure into file directory wit
 
 I have forked his repo and update to current piwigo version, as far as possible.
 Latest Changes:
-- upgrade piwigo-Version to 16.2.0
-- upgrade to php85-fpm-alpine (which is 3.23)
+- upgrade piwigo-Version to 16.4.0
+- upgrade to php84-fpm-alpine (which is 3.23)
 (currently trying to implement fully automated docker-builds including tagging based on versions)
+(not successful, so far...)
 
 # Piwigo-Docker
 
 This is an image for piwigo, linked with a mysql database.
-Data must be stored on a volume.
+Data must be stored on a volume (see Dockerfile for details, inherited from Mathieu's original def).
 
 ## Features
 - Easy deployment of Piwigo with a docker-compose.
