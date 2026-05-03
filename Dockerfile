@@ -2,7 +2,8 @@ FROM php:8.4-fpm-alpine
 
 LABEL MAINTAINER="J Gecius <devel@gecius.de>"
 ARG PIWIGO_VERSION="16.4.0"
-ENV BASH_MODE="set -e"
+ENV BASH_MODE="set -e" \
+    TZ=Europe/Berlin
 
 RUN <<EOF
 ${BASH_MODE}
@@ -27,6 +28,7 @@ apk add     wget \
             libldap \
 			php85-pecl-imagick \
             libzip \
+			tzdata \
 
 EOF
 
@@ -69,6 +71,11 @@ apk del     libpng-dev \
             libzip-dev \
 
 EOF
+
+
+# Symlink timezone file to /etc/localtime (system-wide local time)
+RUN ln -sf /usr/share/zoneinfo/$TZ /etc/localtime && \
+    echo $TZ > /etc/timezone  # Optional: Help apps detect timezone
 
 RUN <<EOF
 ${BASH_MODE}
