@@ -35,8 +35,9 @@ jobs:
           else
             TAGS='["gmaniac/piwigo:latest"]'
           fi
-          echo '::set-output name=tags::'$TAGS
-      - name: ECho tags
+          echo '{name}={value}' >> GITHUB_OUTPUT
+#          echo '::set-output name=tags::'$TAGS
+      - name: Echo tags
         run: |
           echo -e "tags: \n${{ fromJson(steps.gen_tags.outputs.tags) }}"
 #      - name: Set up QEMU
