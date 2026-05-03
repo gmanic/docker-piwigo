@@ -37,9 +37,9 @@ jobs:
           fi
           echo '{name}={value}' >> GITHUB_OUTPUT
 #          echo '::set-output name=tags::'$TAGS
-      - name: Echo tags
-        run: |
-          echo -e "tags: \n${{ fromJson(steps.gen_tags.outputs.tags) }}"
+##      - name: Echo tags
+##        run: |
+##          echo -e "tags: \n${{ fromJson(steps.gen_tags.outputs.tags) }}"
 #      - name: Set up QEMU
 #        uses: docker/setup-qemu-action@v2
 #      - name: Set up Docker Buildx
