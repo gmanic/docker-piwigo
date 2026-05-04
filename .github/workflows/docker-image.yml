@@ -2,6 +2,11 @@ name: Docker Image CI
 
 on:
   workflow_dispatch:
+    inputs:
+      tags:
+        description: "Enter Tag to create"
+        required: true
+        default: "latest"
   push:
     tags:
       - "*"
