@@ -23,32 +23,30 @@ jobs:
         uses: docker/metadata-action@v6
         with:
           images: |
-            gmaniac/piwigo
-#          tags: |
-#            # set latest tag for main branch
-#            type=semver,pattern={{version}}
-#            type=raw,value=latest,enable={{is_default_branch}}
+            ${{ secrets.DOCKER_USERNAME }}/piwigo
+          tags: |
+            # set latest tag for main branch
+            type=semver,pattern={{version}}
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=ref,event=tag
+            type=semver,pattern={{major}}.{{minor}}
 #            type=ref,event=branch
 #            type=ref,event=pr
-#            type=ref,event=tag
-#            type=semver,pattern={{major}}.{{minor}}
       - name: Check on tags
         id: gen_tags
         run: |
           if [[ $GITHUB_REF == 'refs/tags/'* ]]; then
-            TAGS='["gmaniac/piwigo:latest","gmaniac/piwigo:'${GITHUB_REF/refs\/tags\//}'"]'
-          else
-            TAGS='["gmaniac/piwigo:latest"]'
+            TAGS='["${{ secrets.DOCKERHUB_USERNAME }}/piwigo:'${GITHUB_REF/refs\/tags\//}'"]'
           fi
           echo 'tags=${TAGS}' >> GITHUB_OUTPUT
 #          echo '::set-output name=tags::'$TAGS
       - name: Echo tags
         run: |
           echo -e "tags: \n ${{steps.gen_tags.outputs.tags}}"
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v4
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v4
+#      - name: Set up QEMU
+#        uses: docker/setup-qemu-action@v4
+#      - name: Set up Docker Buildx
+#        uses: docker/setup-buildx-action@v4
       - name: Login to Docker Hub
         uses: docker/login-action@v4
         with:
@@ -60,7 +58,9 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/piwigo:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/piwigo:${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
       - name: Docker Hub Description
         if: github.ref == 'refs/heads/master'
@@ -68,4 +68,4 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-          repository: gmaniac/piwigo
+          repository: ${{ secrets.DOCKERHUB_USERNAME }}/piwigo
