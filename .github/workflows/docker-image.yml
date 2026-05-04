@@ -48,6 +48,7 @@ jobs:
       - name: Echo tags
         run: |
           echo -e "tags: \n ${{steps.gen_tags.outputs.tags}}"
+          echo -e "meta-tags: ${{steps.meta.outputs.tags}}"
 #      - name: Set up QEMU
 #        uses: docker/setup-qemu-action@v4
       - name: Set up Docker Buildx
@@ -60,7 +61,7 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/piwigo:latest
-            ${{ steps.meta.outputs.tags }}
+            ${{ secrets.DOCKERHUB_USERNAME }}${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           annotations: ${{ steps.meta.outputs.annotations }}
           provenance: true
