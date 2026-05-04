@@ -20,22 +20,22 @@ jobs:
           images: |
             gmaniac/piwigo
           tags: |
-            # set latest tag for master branch
+            # set latest tag for main branch
             type=raw,value=latest,enable={{is_default_branch}}
             type=ref,event=branch
             type=ref,event=pr
             type=ref,event=tag
             type=semver,pattern={{version}}-*
             type=semver,pattern={{major}}.{{minor}}
-      - name: Build and push
+      - name: Check on tags
         id: gen_tags
         run: |
           if [[ $GITHUB_REF == 'refs/tags/'* ]]; then
-            TAGS='["gmaniac/piwigo:latest","user/image:'${GITHUB_REF/refs\/tags\//}'"]'
+            TAGS='["gmaniac/piwigo:latest","gmaniac/piwigo:'${GITHUB_REF/refs\/tags\//}'"]'
           else
             TAGS='["gmaniac/piwigo:latest"]'
           fi
-          echo '{name}={value}' >> GITHUB_OUTPUT
+          echo 'tag=${TAGS}' >> GITHUB_OUTPUT
 #          echo '::set-output name=tags::'$TAGS
 ##      - name: Echo tags
 ##        run: |
@@ -55,7 +55,7 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.gen_tags.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
       - name: Docker Hub Description
         if: github.ref == 'refs/heads/master'
