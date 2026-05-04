@@ -19,9 +19,9 @@ jobs:
         with:
           images: |
             gmaniac/piwigo
-          tags: |
-            # set latest tag for main branch
-            type=semver,pattern={{version}}
+#          tags: |
+#            # set latest tag for main branch
+#            type=semver,pattern={{version}}
 #            type=raw,value=latest,enable={{is_default_branch}}
 #            type=ref,event=branch
 #            type=ref,event=pr
@@ -37,9 +37,9 @@ jobs:
           fi
           echo 'tag=${TAGS}' >> GITHUB_OUTPUT
 #          echo '::set-output name=tags::'$TAGS
-##      - name: Echo tags
-##        run: |
-##          echo -e "tags: \n${{ fromJson(steps.gen_tags.outputs.tags) }}"
+      - name: Echo tags
+        run: |
+          echo -e "tags: \n ${{steps.gen_tags.outputs.tags}}"
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v4
       - name: Set up Docker Buildx
