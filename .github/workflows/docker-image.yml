@@ -23,7 +23,7 @@ jobs:
         uses: docker/metadata-action@v6
         with:
           images: |
-            ${{ secrets.DOCKER_USERNAME }}/piwigo
+            gmaniac/piwigo
           tags: |
             # set latest tag for main branch
             type=semver,pattern={{version}}
