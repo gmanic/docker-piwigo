@@ -26,7 +26,7 @@ jobs:
       - name: Auto-tag repo with full tag
         continue-on-error: true
         env:
-          GH_TOKEN: ${{ secrets.GH_AUTO_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_SEC_TOKEN }}
         run: |
           git config user.name "Github Actions"
           git config user.email "github-actions@users.noreply.github.com"
