@@ -8,7 +8,8 @@ on:
         required: true
         default: "latest"
   push:
-    tags: '[0-9]+\.[0-9]+\.[0-9]+*'
+    branches: '**'
+    tags: '**'
 
 jobs:
   docker:
