@@ -8,12 +8,14 @@ on:
         required: true
         default: "latest"
   push:
-    tags:
-      - "*"
+    tags: 
+      - 1*
+      - 2*
+      - 3*
 
 jobs:
   docker:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-lates
     environment: dockerhub
     steps:
       - name: Checkout
