@@ -25,8 +25,8 @@ jobs:
           M_TAG=$(grep 'ARG PIWIGO_VERSION' Dockerfile|sed 's/ARG PIWIGO_VERSION=//g'|sed 's/"//g')
           New_TAG=$M_TAG-php$N_TAG
           echo "New Tag generated: $New_TAG, $M_TAG"
-          echo "NEW_TAG=$New_TAG" >> GITHUB_OUTPUT
-          echo "M_TAG=$M_TAG" >> GITHUB_OUTPUT
+          echo "new_tag=$New_TAG" >> GITHUB_OUTPUT
+          echo "m_tag=$M_TAG" >> GITHUB_OUTPUT
           echo "tags=$M_TAG, $New_TAG" >> GITHUB_OUTPUT
       - name: Auto-tag repo with full tag
         continue-on-error: true
@@ -36,9 +36,9 @@ jobs:
           git config user.name "Github Actions"
           git config user.email "github-actions@users.noreply.github.com"
           git tag $M_TAG
-          git push origin tag $M_TAG
+          git push origin tag ${{ steps.find_tags.outputs.m_tag }}
           git tag $NEW_TAG
-          git push origin tag $NEW_TAG
+          git push origin tag ${{ steps.find_tags.outputs.new_tag }}
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v6
@@ -64,12 +64,12 @@ jobs:
       - name: Echo tags
         id: echo_tags
         run: |
-          echo -e "tags: \n ${{steps.gen_tags.outputs.tags}}"
+          echo -e "gen-tags: \n ${{steps.gen_tags.outputs.tags}}"
           echo -e "meta-tags: ${{steps.meta.outputs.tags}}"
-          echo -e "gen-tags: ${{steps.find_tags.outputs.tags}}"
+          echo -e "find-tags: ${{steps.find_tags.outputs.tags}}"
           echo -e "debug=true" >> GITHUB_OUTPUT
       - name: Stop if debug
-        if: ${{ steps.echo_tags.outputs.debug }}
+        if: ${{ steps.echo_tags.outputs.debug == true }}
         uses: actions/github-script@v3
         with:
           script: |
