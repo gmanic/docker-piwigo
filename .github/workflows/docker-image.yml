@@ -25,9 +25,9 @@ jobs:
           M_TAG=$(grep 'ARG PIWIGO_VERSION' Dockerfile|sed 's/ARG PIWIGO_VERSION=//g'|sed 's/"//g')
           New_TAG=$M_TAG-php$N_TAG
           echo "New Tag generated: $New_TAG, $M_TAG"
-          echo "new_tag=$New_TAG" >> GITHUB_OUTPUT
-          echo "m_tag=$M_TAG" >> GITHUB_OUTPUT
-          echo "tags=$M_TAG, $New_TAG" >> GITHUB_OUTPUT
+          echo "new_tag=$New_TAG" >> ${GITHUB_OUTPUT}
+          echo "m_tag=$M_TAG" >> ${GITHUB_OUTPUT}
+          echo "tags=$M_TAG, $New_TAG" >> ${GITHUB_OUTPUT}
       - name: Auto-tag repo with full tag
         continue-on-error: true
         env:
@@ -60,16 +60,16 @@ jobs:
             TAGS='${{ vars.DOCKERUSER }}/piwigo:${{inputs.tags}}'
           fi
           echo '${TAGS}'
-          echo 'tags=${TAGS}' >> GITHUB_OUTPUT
+          echo 'tags=${TAGS}' >> ${GITHUB_OUTPUT}
       - name: Echo tags
         id: echo_tags
         run: |
           echo -e "gen-tags: \n ${{steps.gen_tags.outputs.tags}}"
           echo -e "meta-tags: ${{steps.meta.outputs.tags}}"
           echo -e "find-tags: ${{steps.find_tags.outputs.tags}}"
-          echo -e "debug=true" >> GITHUB_OUTPUT
+          echo -e "debug=true" >> ${GITHUB_OUTPUT}
       - name: Stop if debug
-        if: ${{ steps.echo_tags.outputs.debug == true }}
+#        if: ${{ steps.echo_tags.outputs.debug == true }}
         uses: actions/github-script@v3
         with:
           script: |
