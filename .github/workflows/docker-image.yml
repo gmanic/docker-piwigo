@@ -29,7 +29,7 @@ jobs:
           echo "m_tag=$M_TAG" >> ${GITHUB_OUTPUT}
           echo "tags=${{ vars.DOCKERUSER }}/piwigo:$M_TAG, ${{ vars.DOCKERUSER }}/piwigo:$New_TAG" >> ${GITHUB_OUTPUT}
       - name: Auto-tag repo with full tag
-        continue-on-error: true
+        continue-on-error: false
         env:
           GH_TOKEN: ${{ secrets.GH_SEC_TOKEN }}
         run: |
@@ -51,20 +51,9 @@ jobs:
             type=raw,value=latest,enable={{is_default_branch}}
             type=ref,event=tag
             type=semver,pattern={{major}}.{{minor}}*
-      - name: Check on tags
-        id: gen_tags
-        run: |
-          if [[ $GITHUB_REF == 'refs/tags/'* ]]; then
-            TAGS='["${{ vars.DOCKERUSER }}/piwigo:'${GITHUB_REF/refs\/tags\//}'"]'
-          else
-            TAGS='${{ vars.DOCKERUSER }}/piwigo:${{inputs.tags}}'
-          fi
-          echo 'tags: $TAG_S'
-          echo 'tags=$TAG_S' >> ${GITHUB_OUTPUT}
       - name: Echo tags
         id: echo_tags
         run: |
-          echo -e "gen-tags:  ${{steps.gen_tags.outputs.tags}}"
           echo -e "meta-tags: ${{steps.meta.outputs.tags}}"
           echo -e "find-tags: ${{steps.find_tags.outputs.tags}}"
           echo -e "debug=false" >> ${GITHUB_OUTPUT}
