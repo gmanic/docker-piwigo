@@ -8,8 +8,8 @@ on:
         required: true
         default: "latest"
   push:
-    branches: '**'
-    tags: '**'
+    #branches: '*'
+    tags: '*'
 
 jobs:
   docker:
