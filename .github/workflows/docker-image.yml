@@ -27,9 +27,9 @@ jobs:
           echo "New Tag generated: $New_TAG, $M_TAG"
           echo "new_tag=$New_TAG" >> ${GITHUB_OUTPUT}
           echo "m_tag=$M_TAG" >> ${GITHUB_OUTPUT}
-          echo "tags=$M_TAG, $New_TAG" >> ${GITHUB_OUTPUT}
+          echo "tags=${{ vars.DOCKERUSER }}/piwigo:$M_TAG, ${{ vars.DOCKERUSER }}/piwigo:$New_TAG, ${{ vars.DOCKERUSER }}/piwigo:latest" >> ${GITHUB_OUTPUT}
       - name: Auto-tag repo with full tag
-        continue-on-error: true
+        continue-on-error: false
         env:
           GH_TOKEN: ${{ secrets.GH_SEC_TOKEN }}
         run: |
@@ -68,12 +68,12 @@ jobs:
           echo -e "meta-tags: ${{steps.meta.outputs.tags}}"
           echo -e "find-tags: ${{steps.find_tags.outputs.tags}}"
           echo -e "debug=true" >> ${GITHUB_OUTPUT}
-      - name: Stop if debug
-        #if: ${{ steps.echo_tags.outputs.debug == true }}
-        uses: actions/github-script@v3
-        with:
-          script: |
-            core.setFailed('Debugging, so stop here')
+#      - name: Stop if debug
+#        if: ${{ steps.echo_tags.outputs.debug == true }}
+#        uses: actions/github-script@v3
+#        with:
+#          script: |
+#            core.setFailed('Debugging, so stop here')
 
       - name: Login to Docker Hub
         uses: docker/login-action@v4
@@ -90,7 +90,7 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
             ${{ vars.DOCKERUSER }}/piwigo:latest
-            ${{ steps.meta.outputs.tags }}
+            ${{ steps.find.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           annotations: ${{ steps.meta.outputs.annotations }}
           provenance: true
