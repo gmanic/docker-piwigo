@@ -69,7 +69,7 @@ jobs:
           echo -e "find-tags: ${{steps.find_tags.outputs.tags}}"
           echo -e "debug=false" >> ${GITHUB_OUTPUT}
       - name: Stop if debug
-        if: ${{ steps.echo_tags.outputs.debug }} == true
+        if: ${{ steps.echo_tags.outputs.debug == "true" }}
         uses: actions/github-script@v3
         with:
           script: |
