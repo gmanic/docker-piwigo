@@ -8,16 +8,37 @@ on:
         required: true
         default: "latest"
   push:
-    branches: '*'
-    tags: '*'
+#    branches: '*'
+#    tags: '*'
 
 jobs:
-  docker:
+  tagandci:
     runs-on: ubuntu-latest
     environment: dockerhub
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+      - name: Generate tags
+        id: find_tags
+        run: |
+          N_TAG=$(grep 'FROM php:' Dockerfile|sed 's/FROM php://g')
+          M_TAG=$(grep 'ARG PIWIGO_VERSION' Dockerfile|sed 's/ARG PIWIGO_VERSION=//g'|sed 's/"//g')
+          New_TAG=$M_TAG-php$N_TAG
+          echo "New Tag generated: $New_TAG, $M_TAG"
+          echo "NEW_TAG=$New_TAG" >> $GITHUB_ENV
+          echo "M_TAG=$M_TAG" >> $GITHUB_ENV
+          echo "tags=$M_TAG, $New_TAG" >> $GITHUB_ENV
+      - name: Auto-tag repo with full tag
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GH_SEC_TOKEN }}
+        run: |
+          git config user.name "Github Actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git tag $M_TAG
+          git push origin tag $M_TAG
+          git tag $NEW_TAG
+          git push origin tag $NEW_TAG
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v6
@@ -30,13 +51,6 @@ jobs:
             type=raw,value=latest,enable={{is_default_branch}}
             type=ref,event=tag
             type=semver,pattern={{major}}.{{minor}}*
-#            type=ref,event=branch
-#            type=ref,event=pr
-      - name: Login to Docker Hub
-        uses: docker/login-action@v4
-        with:
-          username: ${{ vars.DOCKERUSER }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Check on tags
         id: gen_tags
         run: |
@@ -48,11 +62,24 @@ jobs:
           echo '${TAGS}'
           echo 'tags=${TAGS}' >> GITHUB_OUTPUT
       - name: Echo tags
+        id: echo_tags
         run: |
           echo -e "tags: \n ${{steps.gen_tags.outputs.tags}}"
           echo -e "meta-tags: ${{steps.meta.outputs.tags}}"
-#      - name: Set up QEMU
-#        uses: docker/setup-qemu-action@v4
+          echo -e "gen-tags: ${{steps.find_tags.outputs.tags}}"
+          echo -e "debug=true" >> $GITHUB_ENV
+      - name: Stop if debug
+        if: ${{ steps.echo_tags.outputs.debug }}
+        uses: actions/github-script@v3
+        with:
+          script: |
+            core.setFailed('Debugging, so stop here')
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ vars.DOCKERUSER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
       - name: Build and push
