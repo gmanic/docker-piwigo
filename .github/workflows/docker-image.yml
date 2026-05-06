@@ -35,16 +35,16 @@ jobs:
         run: |
           git config user.name "Github Actions"
           git config user.email "github-actions@users.noreply.github.com"
-          git tag $M_TAG
+          git tag ${{ steps.find_tags.outputs.m_tag }}
           git push origin tag ${{ steps.find_tags.outputs.m_tag }}
-          git tag $NEW_TAG
+          git tag ${{ steps.find_tags.outputs.new_tag }}
           git push origin tag ${{ steps.find_tags.outputs.new_tag }}
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v6
         with:
           images: |
-            ${{vars.DOCKERUSER}}/piwigo
+            ${{ vars.DOCKERUSER }}/piwigo
           tags: |
             # set latest tag for main branch
             type=semver,pattern={{version}}
@@ -55,21 +55,21 @@ jobs:
         id: gen_tags
         run: |
           if [[ $GITHUB_REF == 'refs/tags/'* ]]; then
-            TAGS='["${{ vars.DOCKERUSERE }}/piwigo:'${GITHUB_REF/refs\/tags\//}'"]'
+            TAGS='["${{ vars.DOCKERUSER }}/piwigo:'${GITHUB_REF/refs\/tags\//}'"]'
           else
             TAGS='${{ vars.DOCKERUSER }}/piwigo:${{inputs.tags}}'
           fi
-          echo '$TAGS'
-          echo 'tags=$TAGS' >> ${GITHUB_OUTPUT}
+          echo 'tags: $TAG_S'
+          echo 'tags=$TAG_S' >> ${GITHUB_OUTPUT}
       - name: Echo tags
         id: echo_tags
         run: |
-          echo -e "gen-tags: \n ${{steps.gen_tags.outputs.tags}}"
+          echo -e "gen-tags:  ${{steps.gen_tags.outputs.tags}}"
           echo -e "meta-tags: ${{steps.meta.outputs.tags}}"
           echo -e "find-tags: ${{steps.find_tags.outputs.tags}}"
           echo -e "debug=true" >> ${GITHUB_OUTPUT}
       - name: Stop if debug
-        if: ${{ steps.echo_tags.outputs.debug == true }}
+        #if: ${{ steps.echo_tags.outputs.debug == true }}
         uses: actions/github-script@v3
         with:
           script: |
