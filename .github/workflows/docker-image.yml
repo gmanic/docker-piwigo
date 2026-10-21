@@ -13,7 +13,7 @@ on:
 
 jobs:
   tagandci:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     environment: dockerhub
     steps:
       - name: Checkout
