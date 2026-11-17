@@ -1,8 +1,8 @@
-FROM php:8.4-fpm-alpine
+FROM php:8.5-fpm-alpine
 
 LABEL MAINTAINER="J Gecius <devel@gecius.de>"
-ARG PIWIGO_VERSION="16.4.0"
-ARG IMAGE_VERSION="16.4.0.1"
+ARG PIWIGO_VERSION="16.5.0"
+ARG IMAGE_VERSION="16.5.0.1"
 ENV BASH_MODE="set -e" \
     TZ=Europe/Berlin
 

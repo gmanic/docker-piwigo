@@ -7,7 +7,12 @@ You can export and rebuild your virtual albums structure into file directory wit
 ---
 
 I have forked his repo and update to current piwigo version, as far as possible.
-Latest Changes:
+Latest Changes (latest first):
+
+2026-11-17
+- upgrade piwigo-version to 16.5.0, incl php85-fpm-alpine3.24 (php:fpm-alpine)
+
+earlier
 - upgrade piwigo-Version to 16.4.0
 - upgrade to php84-fpm-alpine (which is 3.23)
 (currently trying to implement fully automated docker-builds including tagging based on versions)
