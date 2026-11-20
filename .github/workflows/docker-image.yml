@@ -86,9 +86,9 @@ jobs:
           provenance: true
           sbom: true
       - name: Docker Hub Description
-        if: github.ref == 'refs/heads/master'
-        uses: peter-evans/dockerhub-description@v4
+        uses: peter-evans/dockerhub-description@v5
         with:
           username: ${{ vars.DOCKERUSER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           repository: ${{ vars.DOCKERUSER }}/piwigo
+          short-description: ${{ github.event.repository.description }}

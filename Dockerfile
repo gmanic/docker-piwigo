@@ -2,7 +2,7 @@ FROM php:8.5-fpm-alpine
 
 LABEL MAINTAINER="J Gecius <devel@gecius.de>"
 ARG PIWIGO_VERSION="16.5.0"
-ARG IMAGE_VERSION="16.5.0.1"
+ARG IMAGE_VERSION="16.5.0.2"
 ENV BASH_MODE="set -e" \
     TZ=Europe/Berlin
 
@@ -174,15 +174,15 @@ COPY <<EOF /entrypoint.sh
 #!/bin/bash
 ${BASH_MODE}
 for d in $(ls /template); do
-  [ -f "/var/www/${d}" ] || cp -R /template/${d}/* /var/www/${d}/
+    [ -f "/var/www/${d}" ] || cp -R /template/${d}/* /var/www/${d}/
 done
 
 chown -R www-data:www-data /var/www
 
 if [ ! -z "${PIWIGO_MYSQL_ENGINE}" ]; then
-	grep -Rn MyISAM /var/www/install | cut -d: -f1 | sort -u | while read file; do
-		sed -i 's/MyISAM/InnoDB/' "${file}";
-	done;
+    grep -Rn MyISAM /var/www/install | cut -d: -f1 | sort -u | while read file; do
+        sed -i 's/MyISAM/InnoDB/' "${file}";
+    done;
 fi;
 
 php-fpm -D
